@@ -1,5 +1,4 @@
 ﻿namespace Calendars._2022.Day01;
-
 public static class DoWork {
     public static int FirstPart(string input, int take = 1) {
         var elves = new List<int>();
