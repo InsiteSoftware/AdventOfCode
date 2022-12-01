@@ -3,10 +3,10 @@ public static class DoWork {
     public static int FirstPart(string input, int take = 1) {
         var elves = new List<int>();
         var current = 0;
-        input.Split('\n').Select(o => o.Trim()).Select(o => o == string.Empty ? -1 : int.Parse(o)).ToList().ForEach(o => {
-            if (o == -1)
+        input.Split('\n').Select(o => o.Trim()).ToList().ForEach(o => {
+            if (o == string.Empty)
                 elves.Add(current);
-            current = o == -1 ? 0 : current + o;
+            current = o == string.Empty ? 0 : current + int.Parse(o);
         });
         return elves.Concat(new [] { current }).OrderByDescending(o => o).Take(take).Sum();
     }
