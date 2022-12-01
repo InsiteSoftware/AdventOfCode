@@ -1,58 +1,15 @@
 ﻿namespace Calendars._2022.Day01;
 
-public static class DoWork
-{
-    public static int FirstPart(string input)
-    {
-        var stringReader = new StringReader(input);
-        var line = stringReader.ReadLine();
-
-        var max = 0;
-        var current = 0;
-
-        while (line != null)
-        {
-            if (line == string.Empty)
-            {
-                max = Math.Max(max, current);
-                current = 0;
-            }
-            else
-            {
-                current += int.Parse(line);
-            }
-
-            line = stringReader.ReadLine();
-        }
-
-        return Math.Max(max, current);
-    }
-
-    public static int SecondPart(string input)
-    {
-        var stringReader = new StringReader(input);
-        var line = stringReader.ReadLine();
-
+public static class DoWork {
+    public static int FirstPart(string input, int take = 1) {
         var elves = new List<int>();
         var current = 0;
-
-        while (line != null)
-        {
-            if (line == string.Empty)
-            {
+        input.Split('\n').Select(o => o.Trim()).Select(o => o == string.Empty ? -1 : int.Parse(o)).ToList().ForEach(o => {
+            if (o == -1)
                 elves.Add(current);
-                current = 0;
-            }
-            else
-            {
-                current += int.Parse(line);
-            }
-
-            line = stringReader.ReadLine();
-        }
-
-        elves.Add(current);
-
-        return elves.OrderByDescending(o => o).Take(3).Sum();
+            current = o == -1 ? 0 : current + o;
+        });
+        return elves.Concat(new [] { current }).OrderByDescending(o => o).Take(take).Sum();
     }
+    public static int SecondPart(string input) => FirstPart(input, 3);
 }
