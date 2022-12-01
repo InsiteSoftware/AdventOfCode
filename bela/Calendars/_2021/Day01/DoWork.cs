@@ -1,8 +1,8 @@
-﻿namespace Day1;
+﻿namespace Calendars._2021.Day01;
 
-public static class DoStuff
+public static class DoWork
 {
-    public static int Run(string input)
+    public static int FirstPart(string input)
     {
         var reader = new StringReader(input);
         int? last = null;
@@ -23,7 +23,7 @@ public static class DoStuff
         return ups;
     }
 
-    public static int RunRunningTotal(string input)
+    public static int SecondPart(string input)
     {
         var reader = new StringReader(input);
         int? last = null;
