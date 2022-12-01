@@ -1,4 +1,52 @@
-173
+﻿namespace Calendars._2021.Day01;
+
+using FluentAssertions;
+using NUnit.Framework;
+
+[TestFixture]
+public class Run
+{
+    [Test]
+    public void BasicFirstPart()
+    {
+        var result = DoWork.FirstPart(basicInput);
+        result.Should().Be(7);
+    }
+
+    [Test]
+    public void FileFirstPart()
+    {
+        var result = DoWork.FirstPart(fileInput);
+        Console.WriteLine(result);
+    }
+
+    [Test]
+    public void BasicSecondPart()
+    {
+        var result = DoWork.SecondPart(basicInput);
+        result.Should().Be(5);
+    }
+
+    [Test]
+    public void FileSecondPart()
+    {
+        var result = DoWork.SecondPart(fileInput);
+        Console.WriteLine(result);
+    }
+
+    private static readonly string basicInput =
+        @"199
+200
+208
+210
+200
+207
+240
+269
+260
+263";
+    private static readonly string fileInput =
+        @"173
 179
 200
 210
@@ -1997,4 +2045,5 @@
 9351
 9356
 9372
-9380
+9380";
+}
