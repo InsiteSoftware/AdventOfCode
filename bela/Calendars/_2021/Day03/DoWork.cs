@@ -49,14 +49,45 @@ public static class DoWork
 
     public static int SecondPart(string input)
     {
-        var stringReader = new StringReader(input);
-        var line = stringReader.ReadLine();
-
-        while (line != null)
+        int TrimList(List<string> list, bool keepThingWithMore)
         {
-            line = stringReader.ReadLine();
+            for (var i = 0; i < list[0].Length; i++)
+            {
+                if (list.Count == 1)
+                {
+                    break;
+                }
+
+                var ones = 0;
+                var zeros = 0;
+                foreach (var line in list)
+                {
+                    if (line[i] == '1')
+                    {
+                        ones += 1;
+                    }
+                    else
+                    {
+                        zeros += 1;
+                    }
+                }
+
+                var character = '1';
+                if ((keepThingWithMore && zeros > ones) || (!keepThingWithMore && zeros <= ones))
+                {
+                    character = '0';
+                }
+
+                list = list.Where(o => o[i] == character).ToList();
+            }
+
+            return Convert.ToInt32(list.First(), 2);
         }
 
-        return 0;
+        var numbers = input.Replace("\r", "").Split('\n');
+        var oxygen = TrimList(numbers.ToList(), true);
+        var co2 = TrimList(numbers.ToList(), false);
+
+        return oxygen * co2;
     }
 }
