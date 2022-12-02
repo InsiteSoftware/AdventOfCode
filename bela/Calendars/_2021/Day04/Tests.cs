@@ -21,7 +21,7 @@ public class Tests
     public void BasicSecondPart()
     {
         var result = DoWork.SecondPart(basicInput);
-        result.Should().Be(1234);
+        result.Should().Be(1924);
     }
 
     [Test]

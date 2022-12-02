@@ -4,6 +4,16 @@ public static class DoWork
 {
     public static int FirstPart(string input)
     {
+        return DoThings(input);
+    }
+
+    public static int SecondPart(string input)
+    {
+        return DoThings(input, false);
+    }
+
+    public static int DoThings(string input, bool firstWinner = true)
+    {
         var lines = input.Replace("\r", "").Split('\n');
         var numbersPulled = new Queue<int>(lines[0].Split(',').Select(int.Parse));
         var boards = new List<int[,]>();
@@ -49,25 +59,29 @@ public static class DoWork
                 ForEachSpaceOnBoard((x, y) => action(board, x, y));
             }
         }
-        
+
         while (numbersPulled.Any())
         {
             var nextNumber = numbersPulled.Dequeue();
-            ForEachSpaceOnBoards((board, x, y) =>
-            {
-                if (board[x, y] == nextNumber)
+            ForEachSpaceOnBoards(
+                (board, x, y) =>
                 {
-                    board[x, y] = 0;
+                    if (board[x, y] == nextNumber)
+                    {
+                        board[x, y] = 0;
+                    }
                 }
-            });
+            );
 
             int Winner(int[,] board)
             {
                 var sum = 0;
-                ForEachSpaceOnBoard((x, y) =>
-                {
-                    sum += board[x, y];
-                });
+                ForEachSpaceOnBoard(
+                    (x, y) =>
+                    {
+                        sum += board[x, y];
+                    }
+                );
 
                 return sum * nextNumber;
             }
@@ -75,56 +89,71 @@ public static class DoWork
             int[][] BuildResult(Action<int[][], int, int> action)
             {
                 var result = new int[5][];
-                for(var x = 0; x < 5; x++)
+                for (var x = 0; x < 5; x++)
                 {
                     result[x] = new int[5];
                 }
-                
-                ForEachSpaceOnBoard((x, y) =>
-                {
-                    action(result, x, y);
-                });
+
+                ForEachSpaceOnBoard(
+                    (x, y) =>
+                    {
+                        action(result, x, y);
+                    }
+                );
 
                 return result;
             }
 
-
             int[][] GetRows(int[,] board)
             {
-                return BuildResult((result, x, y) =>
-                {
-                    result[x][y] = board[x, y];
-                });
+                return BuildResult(
+                    (result, x, y) =>
+                    {
+                        result[x][y] = board[x, y];
+                    }
+                );
             }
-            
+
             int[][] GetColumns(int[,] board)
             {
-                return BuildResult((result, x, y) =>
-                {
-                    result[x][y] = board[y, x];
-                });
+                return BuildResult(
+                    (result, x, y) =>
+                    {
+                        result[x][y] = board[y, x];
+                    }
+                );
             }
-            
-            foreach (var board in boards)
+
+            for (var x = boards.Count - 1; x >= 0; x--)
             {
-                if (GetRows(board).Any(o => o.Sum() == 0))
+                if (GetRows(boards[x]).Any(o => o.Sum() == 0))
                 {
-                    return Winner(board);
+                    if (firstWinner || boards.Count == 1)
+                    {
+                        return Winner(boards[x]);
+                    }
+                    else
+                    {
+                        boards.RemoveAt(x);
+                        continue;
+                    }
                 }
 
-                if (GetColumns(board).Any(o => o.Sum() == 0))
+                if (GetColumns(boards[x]).Any(o => o.Sum() == 0))
                 {
-                    return Winner(board);
+                    if (firstWinner || boards.Count == 1)
+                    {
+                        return Winner(boards[x]);
+                    }
+                    else
+                    {
+                        boards.RemoveAt(x);
+                        continue;
+                    }
                 }
             }
         }
-        return 0;
-    }
-
-    public static int SecondPart(string input)
-    {
-        var lines = input.Replace("\r", "").Split('\n');
-
+        
         return 0;
     }
 }
