@@ -18,6 +18,12 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Content Include="2\RealInput.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Include="2\SampleInput.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
       <None Remove="1\SampleInput.txt" />
       <Content Include="1\SampleInput.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
