@@ -1,5 +1,5 @@
 ﻿namespace Calendars._2022.Day02;
 public static class DoWork {
-    public static int FirstPart(string input) => input.Replace("A X", "4").Replace("B X", "1").Replace("C X", "7").Replace("A Y", "8").Replace("B Y", "5").Replace("C Y", "2").Replace("A Z", "3").Replace("B Z", "9").Replace("C Z", "6").Split(Environment.NewLine).Select(int.Parse).Sum();
-    public static int SecondPart(string input) => input.Replace("A X", "3").Replace("B X", "1").Replace("C X", "2").Replace("A Y", "4").Replace("B Y", "5").Replace("C Y", "6").Replace("A Z", "8").Replace("B Z", "9").Replace("C Z", "7").Split(Environment.NewLine).Select(int.Parse).Sum();
+    public static int FirstPart(string o) => o.R("A X", "4").R("B X", "1").R("C X", "7").R("A Y", "8").R("B Y", "5").R("C Y", "2").R("A Z", "3").R("B Z", "9").R("C Z", "6").SP().I().Sum();
+    public static int SecondPart(string o) => o.R("A X", "3").R("B X", "1").R("C X", "2").R("A Y", "4").R("B Y", "5").R("C Y", "6").R("A Z", "8").R("B Z", "9").R("C Z", "7").SP().I().Sum();
 }
