@@ -6,29 +6,25 @@ public class Tests
     [Test]
     public void BasicFirstPart()
     {
-        var result = DoWork.FirstPart(basicInput);
-        result.Should().Be(1234);
+        DoWork.FirstPart(basicInput).Should().Be(1234);
     }
 
     [Test]
     public void FileFirstPart()
     {
-        var result = DoWork.FirstPart(fileInput);
-        Console.WriteLine(result);
+        DoWork.FirstPart(fileInput).Should().Be(1234);
     }
 
     [Test]
     public void BasicSecondPart()
     {
-        var result = DoWork.SecondPart(basicInput);
-        result.Should().Be(1234);
+        DoWork.SecondPart(basicInput).Should().Be(1234);
     }
 
     [Test]
     public void FileSecondPart()
     {
-        var result = DoWork.SecondPart(fileInput);
-        Console.WriteLine(result);
+        DoWork.SecondPart(fileInput).Should().Be(1234);
     }
 
     private static readonly string basicInput = @"TODO";
