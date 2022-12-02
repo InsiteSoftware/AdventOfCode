@@ -9,8 +9,8 @@ async function getResult() {
     crlfDelay: Infinity,
   });
 
+  let arr = [];
   let sum = 0;
-  let max = 0;
   for await (const line of rl) {
     if (line !== "") {
       sum += Number(line);
@@ -18,10 +18,13 @@ async function getResult() {
       if (sum >= max) {
         max = sum;
       }
+      arr.push(Number(sum));
       sum = 0;
     }
   }
-  console.log(max);
+  let sortArr = arr.sort((a, b) => b - a);
+  console.log("The max: ", sortArr[0]);
+  console.log("The first 3 total: ", sortArr[0] + sortArr[1] + sortArr[2]);
 }
 
 getResult();
