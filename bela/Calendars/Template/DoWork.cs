@@ -4,14 +4,11 @@ public static class DoWork
 {
     public static int FirstPart(string input)
     {
-        var stringReader = new StringReader(input);
-        var line = stringReader.ReadLine();
+        var lines = input.Replace("\r", "").Split('\n');
 
-        while (line != null)
+        foreach (var line in lines)
         {
-            // TODO
-
-            line = stringReader.ReadLine();
+            // stuff
         }
 
         return 0;
@@ -19,14 +16,11 @@ public static class DoWork
 
     public static int SecondPart(string input)
     {
-        var stringReader = new StringReader(input);
-        var line = stringReader.ReadLine();
+        var lines = input.Replace("\r", "").Split('\n');
 
-        while (line != null)
+        foreach (var line in lines)
         {
-            // TODO
-
-            line = stringReader.ReadLine();
+            // stuff
         }
 
         return 0;

@@ -21,7 +21,7 @@ public class Run
     public void BasicSecondPart()
     {
         var result = DoWork.SecondPart(basicInput);
-        result.Should().Be(900);
+        result.Should().Be(230);
     }
 
     [Test]
