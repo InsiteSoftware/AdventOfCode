@@ -1,12 +1,10 @@
-﻿namespace Calendars.Template;
+﻿namespace Calendars._2022.Template;
 
 public static class DoWork
 {
     public static int FirstPart(string input)
     {
-        var lines = input.Replace("\r", "").Split('\n');
-
-        foreach (var line in lines)
+        foreach (var line in input.SplitLines())
         {
             // stuff
         }
@@ -16,9 +14,7 @@ public static class DoWork
 
     public static int SecondPart(string input)
     {
-        var lines = input.Replace("\r", "").Split('\n');
-
-        foreach (var line in lines)
+        foreach (var line in input.SplitLines())
         {
             // stuff
         }

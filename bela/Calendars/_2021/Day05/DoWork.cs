@@ -2,63 +2,61 @@
 
 public static class DoWork
 {
-    public static int FirstPart(string input, int length = 10, bool useDiagonals = false)
+    public static int FirstPart(string input, bool useDiagonals = false)
     {
-        var points = new int[length * length];
+        var length = 1000;
+        var points = new Dictionary<int, int>();
 
-        foreach (var line in input.R(" -> ", ",").SP())
+        foreach (var line in input.Replace(" -> ", ",").SplitLines())
         {
-            var inputs = line.Split(',').I().ToArray();
+            var inputs = line.Split(',').Select(int.Parse).ToArray();
             var x1 = inputs[0];
             var y1 = inputs[1];
             var x2 = inputs[2];
             var y2 = inputs[3];
-            if (x1 != x2 && y1 != y2)
+            if (x1 != x2 && y1 != y2 && !useDiagonals)
             {
-                if (!useDiagonals)
-                {
-                    continue;
-                }
-                var x = x1;
-                var y = y1;
-                while(true)
-                {
-                    points[x + (y * length)] += 1;
-
-                    x += x1 < x2 ? 1 : -1;
-                    y += y1 < y2 ? 1 : -1;
-                    if (x > x1 && x > x2 || x < x1 && x < x2)
-                    {
-                        break;
-                    }
-                }
+                continue;
             }
-            else
+
+            var x = x1;
+            var y = y1;
+            while (true)
             {
-                for (var x = Math.Min(x1, x2); x <= Math.Max(x1, x2); x++)
+                var point = x + (y * length);
+                if (!points.ContainsKey(point))
                 {
-                    for (var y = Math.Min(y1, y2); y <= Math.Max(y1, y2); y++)
-                    {
-                        points[x + (y * length)] += 1;
-                    }
+                    points[point] = 0;
+                }
+                points[point] += 1;
+
+                x +=
+                    x1 == x2
+                        ? 0
+                        : x1 < x2
+                            ? 1
+                            : -1;
+                y +=
+                    y1 == y2
+                        ? 0
+                        : y1 < y2
+                            ? 1
+                            : -1;
+
+                if (
+                    (x > x1 && x > x2 || x < x1 && x < x2) || (y > y1 && y > y2 || y < y1 && y < y2)
+                )
+                {
+                    break;
                 }
             }
         }
 
-        // for (var x = 0; x < length * length; x++)
-        // {            
-        //     if (x % length == 0)
-        //     {
-        //         Console.WriteLine();
-        //     }
-        //     Console.Write(points[x].ToString().PadRight(3));
-        // }
-        
-        return points.Count(o => o > 1);
+        return points.Values.Count(o => o > 1);
     }
 
-    public static int SecondPart(string input, int length = 10)
+    public static int SecondPart(string input)
     {
-        return FirstPart(input, length, true);
+        return FirstPart(input, true);
     }
 }
