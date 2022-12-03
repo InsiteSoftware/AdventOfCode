@@ -12,7 +12,7 @@ public class Tests
     [Test]
     public void FileFirstPart()
     {
-        DoWork.FirstPart(fileInput, 1000).Should().Be(3990);
+        DoWork.FirstPart(fileInput).Should().Be(3990);
     }
 
     [Test]
@@ -24,10 +24,11 @@ public class Tests
     [Test]
     public void FileSecondPart()
     {
-        DoWork.SecondPart(fileInput, 1000).Should().Be(21305);
+        DoWork.SecondPart(fileInput).Should().Be(21305);
     }
 
-    private static readonly string basicInput = @"0,9 -> 5,9
+    private static readonly string basicInput =
+        @"0,9 -> 5,9
 8,0 -> 0,8
 9,4 -> 3,4
 2,2 -> 2,1
@@ -38,7 +39,8 @@ public class Tests
 0,0 -> 8,8
 5,5 -> 8,2";
 
-    private static readonly string fileInput = @"781,721 -> 781,611
+    private static readonly string fileInput =
+        @"781,721 -> 781,611
 334,551 -> 119,551
 25,153 -> 765,893
 588,619 -> 588,683
