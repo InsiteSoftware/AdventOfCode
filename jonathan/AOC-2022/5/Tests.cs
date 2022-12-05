@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace AOC_2022._4;
+namespace AOC_2022._5;
 
 public class Tests
 {
@@ -14,7 +14,7 @@ public class Tests
 
         var answer = Code.GetPart1Answer(lines);
         Console.WriteLine(answer);
-        Assert.AreEqual(2, answer);
+        Assert.AreEqual("CMZ", answer);
     }
     
     [Test]
@@ -36,7 +36,7 @@ public class Tests
     
         var answer = Code.GetPart2Answer(lines);
         Console.WriteLine(answer);
-        Assert.AreEqual(4, answer);
+        Assert.AreEqual("MCD", answer);
     }
     
     [Test]
