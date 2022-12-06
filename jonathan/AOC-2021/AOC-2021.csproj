@@ -37,6 +37,14 @@
       <Content Include="1\SampleInput.txt">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+      <None Remove="6\RealInput.txt" />
+      <Content Include="6\RealInput.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="6\SampleInput.txt" />
+      <Content Include="6\SampleInput.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>
