@@ -1,18 +1,14 @@
 namespace Calendars;
 
-public static class StringExtensions {
-    public static string R(this string value, string oldValue, string newValue)
+public static class StringExtensions
+{
+    public static string[] SplitLines(this string value)
     {
-        return value.Replace(oldValue, newValue);
-    }
-    
-    public static string[] SP(this string value, string? separator = null)
-    {
-        return value.Split(separator ?? Environment.NewLine);
+        return value.Split(Environment.NewLine);
     }
 
-    public static IEnumerable<int> I(this string[] value)
+    public static string[] SplitChunks(this string value)
     {
-        return value.Select(int.Parse);
+        return value.Split(Environment.NewLine + Environment.NewLine);
     }
 }

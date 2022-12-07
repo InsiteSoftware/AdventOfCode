@@ -1,4 +1,4 @@
-﻿namespace AOC_2022;
+﻿namespace AOC_2022._1;
 
 public static class Day1
 {

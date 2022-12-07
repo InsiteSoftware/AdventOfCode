@@ -1,4 +1,4 @@
-﻿namespace Calendars.Template;
+﻿namespace Calendars._2022.Template;
 
 [TestFixture]
 public class Tests
