@@ -15,7 +15,7 @@ public static class DoWork
 
         var totalSpace = 70000000;
         var targetSpace = 30000000;
-        var currentSpace = folders.First(o => o.Name == "/").GetSize();
+        var currentSpace = folders.First().GetSize();
         var currentUnused = totalSpace - currentSpace;
 
         return folders.Where(o => currentUnused + o.GetSize() > targetSpace).Min(o => o.GetSize());
@@ -23,7 +23,7 @@ public static class DoWork
 
     private static List<Folder> GetFolders(string input)
     {
-        var folders = new List<Folder> { new() { Name = "/" } };
+        var folders = new List<Folder> { new() };
         var currentFolders = new Stack<Folder>();
         currentFolders.Push(folders[0]);
 
@@ -37,12 +37,7 @@ public static class DoWork
                 line = reader.ReadLine();
                 while (line != null && !line.StartsWith("$"))
                 {
-                    if (line.StartsWith("dir"))
-                    {
-                        var newFolder = new Folder() { Name = line.Replace("dir ", "") };
-                        currentFolders.Peek().Folders.Add(newFolder);
-                        folders.Add(newFolder);
-                    }
+                    if (line.StartsWith("dir")) { }
                     else
                     {
                         currentFolders.Peek().Files.Add(int.Parse(line.Split(' ')[0]));
@@ -58,9 +53,11 @@ public static class DoWork
             }
             else if (line.StartsWith("$ cd "))
             {
-                currentFolders.Push(
-                    currentFolders.Peek().Folders.First(o => o.Name == line.Replace("$ cd ", ""))
-                );
+                var newFolder = new Folder();
+                currentFolders.Peek().Folders.Add(newFolder);
+                folders.Add(newFolder);
+
+                currentFolders.Push(newFolder);
                 line = reader.ReadLine();
             }
         }
@@ -70,7 +67,6 @@ public static class DoWork
 
     private class Folder
     {
-        public string Name { get; set; }
         public readonly List<Folder> Folders = new();
         public readonly List<int> Files = new();
 
