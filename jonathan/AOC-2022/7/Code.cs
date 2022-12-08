@@ -107,7 +107,5 @@ public static class Code
                         .Sum(o => o.Value.Values.Sum())))
             .Where(o => o.Value >= spaceToDelete)
             .MinBy(o => o.Value).Value;
-        
-        return 0;
     }
 }
