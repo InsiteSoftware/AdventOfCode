@@ -92,6 +92,14 @@
       <Content Include="9\SampleInput-part2.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
+      <None Remove="10\RealInput.txt" />
+      <Content Include="10\RealInput.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="10\SampleInput.txt" />
+      <Content Include="10\SampleInput.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>
