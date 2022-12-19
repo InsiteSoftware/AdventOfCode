@@ -100,6 +100,22 @@
       <Content Include="10\SampleInput.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
+      <None Remove="11\RealInput.txt" />
+      <Content Include="11\RealInput.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="11\SampleInput.txt" />
+      <Content Include="11\SampleInput.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="15\RealInput.txt" />
+      <Content Include="15\RealInput.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="15\SampleInput.txt" />
+      <Content Include="15\SampleInput.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>
