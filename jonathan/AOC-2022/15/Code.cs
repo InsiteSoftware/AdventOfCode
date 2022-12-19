@@ -105,37 +105,6 @@ public static partial class Code
         return (point.x, point.y);
     }
 
-    private static int ProcessRow(int maxDimension, List<(int sx, int sy, int bx, int by, int distance)> sensors, int row)
-    {
-        var impossibleBeacons = ArrayPool<bool>.Shared.Rent(maxDimension + 1);
-        Array.Clear(impossibleBeacons, 0, maxDimension + 1);
-
-        try
-        {
-            foreach (var sensor in sensors)
-            {
-                if (Math.Abs(sensor.sy - row) > sensor.distance)
-                    continue;
-
-                var impossibleBeaconsLeftOrRight = Math.Abs(Math.Abs(sensor.sy - row) - sensor.distance);
-
-                for (var j = sensor.sx - impossibleBeaconsLeftOrRight; j <= sensor.sx + impossibleBeaconsLeftOrRight; j++)
-                {
-                    if (j < 0 || j > maxDimension)
-                        continue;
-
-                    impossibleBeacons[j] = true;
-                }
-            }
-            
-            return impossibleBeacons.Take(maxDimension + 1).ToList().IndexOf(false);
-        }
-        finally
-        {
-            ArrayPool<bool>.Shared.Return(impossibleBeacons);
-        }
-    }
-
     [GeneratedRegex(@"Sensor at x=(?<sx>\-?\d+), y=(?<sy>\-?\d+): closest beacon is at x=(?<bx>\-?\d+), y=(?<by>\-?\d+)")]
     private static partial Regex MyRegex();
 }
