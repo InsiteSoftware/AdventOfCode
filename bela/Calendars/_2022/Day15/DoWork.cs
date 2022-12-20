@@ -1,7 +1,6 @@
 ﻿namespace Calendars._2022.Day15;
 
 using System.Numerics;
-using Solution;
 
 public static class DoWork
 {

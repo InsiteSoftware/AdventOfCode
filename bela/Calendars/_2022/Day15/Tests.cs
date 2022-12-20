@@ -1,7 +1,5 @@
 ﻿namespace Calendars._2022.Day15;
 
-using Solution;
-
 [TestFixture]
 public class Tests
 {
