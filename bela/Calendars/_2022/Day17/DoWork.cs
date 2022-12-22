@@ -1,59 +1,75 @@
 ﻿namespace Calendars._2022.Day17;
 
+using System.Runtime.CompilerServices;
+
 public static class DoWork
 {
     public static long FirstPart(string input, long totalRocks = 2022)
     {
-        // 3 units above last rock/floor
-        // air pushes if it can
-        // then rock falls one unit
-        // repeat
-        // if at fall step, there is something blocking it, then it comes to rest
-        var chamber = new List<List<bool>>
-        {
-            new(200),
-            new(200),
-            new(200),
-            new(200),
-            new(200),
-            new(200),
-            new(200)
-        };
+        var chamber = new bool[7, 1000];
 
-        foreach (var stack in chamber)
+        for (var x = 0; x < 7; x++)
         {
-            for (var x = 0; x < 200; x++)
-            {
-                stack.Add(false);
-            }
+            chamber[x, 0] = true;
         }
 
         var gusts = input.ToCharArray().Select(o => o == '<').ToArray();
         var nextGust = 0;
-        var highPoint = 0;
+        var highPoint = 1;
         var offset = 0L;
         for (var rockNumber = 0; rockNumber < totalRocks; rockNumber++)
         {
-            while (highPoint > 100)
+            if (highPoint > 900)
             {
-                offset++;
-                highPoint--;
-                chamber.ForEach(o => o.RemoveAt(1));
-                chamber.ForEach(o => o.Add(false));
+                highPoint -= 800;
+                offset += 800;
+                var newChamber = new bool[7, 1000];
+                for (var x = 0; x < chamber.GetLength(0); x++)
+                {
+                    Buffer.BlockCopy(
+                        chamber,
+                        (800 + (x * chamber.GetLength(1))) * sizeof(bool),
+                        newChamber,
+                        (x * chamber.GetLength(1)) * sizeof(bool),
+                        200 * sizeof(bool)
+                    );
+                }
+
+                chamber = newChamber;
             }
 
             var nextShape = Shape.GetNext(rockNumber, highPoint + 3);
 
+            // void DrawChamber()
+            // {
+            //     for (var y = highPoint + 6; y >= 0; y--)
+            //     {
+            //         for (var x = 0; x < chamber.GetLength(0); x++)
+            //         {
+            //             Console.Write(
+            //                 nextShape.Points.Any(o => o.X == x && o.Y == y)
+            //                     ? "@"
+            //                     : chamber[x, y]
+            //                         ? "#"
+            //                         : "."
+            //             );
+            //         }
+            //         Console.WriteLine();
+            //     }
+            // }
+            //
+            // DrawChamber();
+
             bool CheckCollisions()
             {
+                if (nextShape.FarLeft < 0 || nextShape.FarRight > 6)
+                {
+                    return true;
+                }
+
                 foreach (var point in nextShape.Points)
                 {
-                    if (point.X is < 0 or > 6 || point.Y < 0)
-                    {
-                        return true;
-                    }
-
-                    if (chamber[point.X][point.Y])
+                    if (chamber[point.X, point.Y])
                     {
                         return true;
                     }
@@ -68,29 +84,73 @@ public static class DoWork
                 nextGust = (nextGust + 1) % gusts.Length;
                 if (moveLeft)
                 {
-                    nextShape.MoveLeft();
-                    if (CheckCollisions())
+                    var canMove = true;
+                    if (nextShape.FarLeft == 0)
                     {
-                        nextShape.MoveRight();
+                        canMove = false;
                     }
-                }
-                else if (!moveLeft)
-                {
-                    nextShape.MoveRight();
-                    if (CheckCollisions())
+                    else
+                    {
+                        for (var x = 0; x < nextShape.Points.Count; x++)
+                        {
+                            if (chamber[nextShape.Points[x].X - 1, nextShape.Points[x].Y])
+                            {
+                                canMove = false;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (canMove)
                     {
                         nextShape.MoveLeft();
                     }
                 }
-
-                nextShape.MoveDown();
-                if (CheckCollisions())
+                else
                 {
-                    nextShape.MoveUp();
-                    foreach (var point in nextShape.Points)
+                    var canMove = true;
+                    if (nextShape.FarRight == 6)
                     {
-                        highPoint = Math.Max(highPoint, point.Y + 1);
-                        chamber[point.X][point.Y] = true;
+                        canMove = false;
+                    }
+                    else
+                    {
+                        for (var x = 0; x < nextShape.Points.Count; x++)
+                        {
+                            if (chamber[nextShape.Points[x].X + 1, nextShape.Points[x].Y])
+                            {
+                                canMove = false;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (canMove)
+                    {
+                        nextShape.MoveRight();
+                    }
+                }
+
+                var canFall = true;
+                for (var x = 0; x < nextShape.Points.Count; x++)
+                {
+                    if (chamber[nextShape.Points[x].X, nextShape.Points[x].Y - 1])
+                    {
+                        canFall = false;
+                        break;
+                    }
+                }
+
+                if (canFall)
+                {
+                    nextShape.MoveDown();
+                }
+                else
+                {
+                    for (var x = 0; x < nextShape.Points.Count; x++)
+                    {
+                        highPoint = Math.Max(highPoint, nextShape.Points[x].Y + 1);
+                        chamber[nextShape.Points[x].X, nextShape.Points[x].Y] = true;
                     }
 
                     break;
@@ -98,16 +158,19 @@ public static class DoWork
             }
         }
 
-        return highPoint + offset;
+        return highPoint + offset - 1;
     }
 
     public static long SecondPart(string input)
     {
-        return FirstPart(input, 1000000000000);
+        return FirstPart(input, 10000000);
     }
 
     private class Shape
     {
+        public int FarLeft;
+        public int FarRight;
+
         public static Shape GetNext(int blockNumber, int startingY)
         {
             return (blockNumber % 5) switch
@@ -127,6 +190,8 @@ public static class DoWork
             shape.Points.Add(new Point(3, startingY));
             shape.Points.Add(new Point(4, startingY));
             shape.Points.Add(new Point(5, startingY));
+            shape.FarLeft = 2;
+            shape.FarRight = 5;
             return shape;
         }
 
@@ -137,6 +202,8 @@ public static class DoWork
             shape.Points.Add(new Point(2, startingY + 1));
             shape.Points.Add(new Point(2, startingY + 2));
             shape.Points.Add(new Point(2, startingY + 3));
+            shape.FarLeft = 2;
+            shape.FarRight = 2;
             return shape;
         }
 
@@ -148,6 +215,8 @@ public static class DoWork
             shape.Points.Add(new Point(4, startingY + 1));
             shape.Points.Add(new Point(3, startingY));
             shape.Points.Add(new Point(3, startingY + 2));
+            shape.FarLeft = 2;
+            shape.FarRight = 4;
             return shape;
         }
 
@@ -158,6 +227,8 @@ public static class DoWork
             shape.Points.Add(new Point(3, startingY + 1));
             shape.Points.Add(new Point(2, startingY));
             shape.Points.Add(new Point(3, startingY));
+            shape.FarLeft = 2;
+            shape.FarRight = 3;
             return shape;
         }
 
@@ -169,30 +240,47 @@ public static class DoWork
             shape.Points.Add(new Point(4, startingY));
             shape.Points.Add(new Point(4, startingY + 1));
             shape.Points.Add(new Point(4, startingY + 2));
+            shape.FarLeft = 2;
+            shape.FarRight = 4;
             return shape;
         }
 
-        public List<Point> Points = new();
+        public readonly List<Point> Points = new(5);
 
         public void MoveLeft()
         {
-            this.Points.ForEach(o => o.X--);
+            for (var x = 0; x < this.Points.Count; x++)
+            {
+                this.Points[x].X--;
+            }
+            this.FarLeft--;
+            this.FarRight--;
         }
 
         public void MoveRight()
         {
-            this.Points.ForEach(o => o.X++);
+            for (var x = 0; x < this.Points.Count; x++)
+            {
+                this.Points[x].X++;
+            }
+            this.FarLeft++;
+            this.FarRight++;
         }
 
         public void MoveDown()
         {
-            this.Points.ForEach(o => o.Y--);
+            for (var x = 0; x < this.Points.Count; x++)
+            {
+                this.Points[x].Y--;
+            }
         }
 
         public void MoveUp()
         {
-            this.Points.ForEach(o => o.Y++);
-            ;
+            for (var x = 0; x < this.Points.Count; x++)
+            {
+                this.Points[x].Y++;
+            }
         }
     }
 

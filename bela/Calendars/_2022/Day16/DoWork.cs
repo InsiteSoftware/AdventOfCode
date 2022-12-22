@@ -62,8 +62,11 @@ public static class DoWork
 
         var firstPath = new PossiblePath
         {
+            Path = "AA",
+            ElephantPath = "AA",
             Pressure = 0,
-            MinutesLeft = 30,
+            MinutesLeft = 26,
+            ElephantMinutesLeft = 26,
             CurrentValve = "AA",
             ElephantValve = "AA",
             ValvesToVisit = valvesWithFlow.Select(o => o.Name).ToList()
@@ -75,35 +78,71 @@ public static class DoWork
         while (possiblePaths.Any())
         {
             var possiblePath = possiblePaths.Dequeue();
-            // need separate minutes for you and elephant?
-            // for (var x = 0; x < possiblePath.ValvesToVisit.Count - 1; x++)
-            // {
-            //     for (var y = x + 1; y < possiblePath.ValvesToVisit; y++)
-            //     {
-            //         var newPath = new PossiblePath
-            //         {
-            //             MinutesLeft =
-            //                 possiblePath.MinutesLeft
-            //                 - valvesByName[possiblePath.CurrentValve].DistancesTo[valveToVisit]
-            //                 - 1,
-            //             CurrentValve = valveToVisit,
-            //             ValvesToVisit = possiblePath.ValvesToVisit
-            //                 .Where(o => o != valveToVisit)
-            //                 .ToList()
-            //         };
-            //         newPath.Pressure =
-            //             possiblePath.Pressure
-            //             + (newPath.MinutesLeft * valvesByName[valveToVisit].FlowRate);
-            //         newPath.CalculateTheoreticalBest(valvesByName);
-            //
-            //         if (newPath.TheoreticalBest < currentBest)
-            //         {
-            //             continue;
-            //         }
-            //         currentBest = Math.Max(currentBest, newPath.Pressure);
-            //         possiblePaths.Enqueue(newPath);
-            //     }
-            // }
+
+            if (possiblePath.ElephantMinutesLeft > possiblePath.MinutesLeft)
+            {
+                foreach (var valveToVisit in possiblePath.ValvesToVisit)
+                {
+                    var newPath = new PossiblePath
+                    {
+                        Path = possiblePath.Path,
+                        ElephantPath = possiblePath.ElephantPath += ":" + valveToVisit,
+                        MinutesLeft = possiblePath.MinutesLeft,
+                        ElephantMinutesLeft =
+                            possiblePath.ElephantMinutesLeft
+                            - valvesByName[possiblePath.ElephantValve].DistancesTo[valveToVisit]
+                            - 1,
+                        CurrentValve = possiblePath.CurrentValve,
+                        ElephantValve = valveToVisit,
+                        ValvesToVisit = possiblePath.ValvesToVisit
+                            .Where(o => o != valveToVisit)
+                            .ToList()
+                    };
+                    newPath.Pressure =
+                        possiblePath.Pressure
+                        + (newPath.ElephantMinutesLeft * valvesByName[valveToVisit].FlowRate);
+                    newPath.CalculateTheoreticalBest(valvesByName);
+
+                    if (newPath.TheoreticalBest < currentBest)
+                    {
+                        continue;
+                    }
+                    currentBest = Math.Max(currentBest, newPath.Pressure);
+                    possiblePaths.Enqueue(newPath);
+                }
+            }
+            else
+            {
+                foreach (var valveToVisit in possiblePath.ValvesToVisit)
+                {
+                    var newPath = new PossiblePath
+                    {
+                        Path = possiblePath.Path += ":" + valveToVisit,
+                        ElephantPath = possiblePath.ElephantPath,
+                        MinutesLeft =
+                            possiblePath.MinutesLeft
+                            - valvesByName[possiblePath.CurrentValve].DistancesTo[valveToVisit]
+                            - 1,
+                        ElephantMinutesLeft = possiblePath.ElephantMinutesLeft,
+                        CurrentValve = valveToVisit,
+                        ElephantValve = possiblePath.ElephantValve,
+                        ValvesToVisit = possiblePath.ValvesToVisit
+                            .Where(o => o != valveToVisit)
+                            .ToList()
+                    };
+                    newPath.Pressure =
+                        possiblePath.Pressure
+                        + (newPath.MinutesLeft * valvesByName[valveToVisit].FlowRate);
+                    newPath.CalculateTheoreticalBest(valvesByName);
+
+                    if (newPath.TheoreticalBest < currentBest)
+                    {
+                        continue;
+                    }
+                    currentBest = Math.Max(currentBest, newPath.Pressure);
+                    possiblePaths.Enqueue(newPath);
+                }
+            }
         }
 
         return currentBest;
@@ -184,8 +223,11 @@ public static class DoWork
 
     private class PossiblePath
     {
+        public string Path { get; set; }
+        public string ElephantPath { get; set; }
         public int Pressure { get; set; }
         public int MinutesLeft { get; set; }
+        public int ElephantMinutesLeft { get; set; }
         public List<string> ValvesToVisit { get; set; }
         public string CurrentValve { get; set; }
         public string ElephantValve { get; set; }
@@ -196,7 +238,8 @@ public static class DoWork
             this.TheoreticalBest = this.Pressure;
             foreach (var valve in this.ValvesToVisit)
             {
-                this.TheoreticalBest += MinutesLeft * valvesByName[valve].FlowRate;
+                this.TheoreticalBest +=
+                    Math.Max(MinutesLeft, ElephantMinutesLeft) * valvesByName[valve].FlowRate;
             }
         }
     }
