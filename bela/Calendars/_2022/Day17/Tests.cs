@@ -12,7 +12,7 @@ public class Tests
     [Test]
     public void FileFirstPart()
     {
-        DoWork.FirstPart(fileInput).Should().Be(1234);
+        DoWork.FirstPart(fileInput).Should().Be(3219);
     }
 
     [Test]

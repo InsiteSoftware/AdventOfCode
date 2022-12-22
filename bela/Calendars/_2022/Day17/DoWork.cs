@@ -13,29 +13,66 @@ public static class DoWork
 
         var gusts = input.ToCharArray().Select(o => o == '<').ToArray();
         var nextGust = 0;
-        var highPoint = 3;
-        for (var x = 0; x < 2022; x++)
+        var highPoint = 0;
+        for (var rockNumber = 0; rockNumber < 2022; rockNumber++)
         {
-            var nextShape = Shape.GetNext(x, highPoint);
+            var nextShape = Shape.GetNext(rockNumber, highPoint + 3);
+
+            bool CheckCollisions()
+            {
+                foreach (var point in nextShape.Points)
+                {
+                    if (point.X is < 0 or > 6 || point.Y < 0)
+                    {
+                        return true;
+                    }
+
+                    if (chamber[point.X, point.Y])
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
             while (true)
             {
-                var moveLeft = gusts[nextGust % gusts.Length];
+                var moveLeft = gusts[nextGust];
+                nextGust = (nextGust + 1) % gusts.Length;
                 if (moveLeft)
                 {
-                    // check if can move left
                     nextShape.MoveLeft();
+                    if (CheckCollisions())
+                    {
+                        nextShape.MoveRight();
+                    }
                 }
                 else if (!moveLeft)
                 {
-                    // check if can move right
                     nextShape.MoveRight();
+                    if (CheckCollisions())
+                    {
+                        nextShape.MoveLeft();
+                    }
                 }
 
-                // check if can move down, if can't, go to next
+                nextShape.MoveDown();
+                if (CheckCollisions())
+                {
+                    nextShape.MoveUp();
+                    foreach (var point in nextShape.Points)
+                    {
+                        highPoint = Math.Max(highPoint, point.Y + 1);
+                        chamber[point.X, point.Y] = true;
+                    }
+
+                    break;
+                }
             }
         }
 
-        return 0;
+        return highPoint;
     }
 
     public static int SecondPart(string input)
@@ -129,6 +166,12 @@ public static class DoWork
         public void MoveDown()
         {
             this.Points.ForEach(o => o.Y--);
+        }
+
+        public void MoveUp()
+        {
+            this.Points.ForEach(o => o.Y++);
+            ;
         }
     }
 
