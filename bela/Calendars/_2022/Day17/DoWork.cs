@@ -2,20 +2,46 @@
 
 public static class DoWork
 {
-    public static int FirstPart(string input)
+    public static long FirstPart(string input, long totalRocks = 2022)
     {
         // 3 units above last rock/floor
         // air pushes if it can
         // then rock falls one unit
         // repeat
         // if at fall step, there is something blocking it, then it comes to rest
-        var chamber = new bool[7, 2022 * 4];
+        var chamber = new List<List<bool>>
+        {
+            new(200),
+            new(200),
+            new(200),
+            new(200),
+            new(200),
+            new(200),
+            new(200)
+        };
+
+        foreach (var stack in chamber)
+        {
+            for (var x = 0; x < 200; x++)
+            {
+                stack.Add(false);
+            }
+        }
 
         var gusts = input.ToCharArray().Select(o => o == '<').ToArray();
         var nextGust = 0;
         var highPoint = 0;
-        for (var rockNumber = 0; rockNumber < 2022; rockNumber++)
+        var offset = 0L;
+        for (var rockNumber = 0; rockNumber < totalRocks; rockNumber++)
         {
+            while (highPoint > 100)
+            {
+                offset++;
+                highPoint--;
+                chamber.ForEach(o => o.RemoveAt(1));
+                chamber.ForEach(o => o.Add(false));
+            }
+
             var nextShape = Shape.GetNext(rockNumber, highPoint + 3);
 
             bool CheckCollisions()
@@ -27,7 +53,7 @@ public static class DoWork
                         return true;
                     }
 
-                    if (chamber[point.X, point.Y])
+                    if (chamber[point.X][point.Y])
                     {
                         return true;
                     }
@@ -64,7 +90,7 @@ public static class DoWork
                     foreach (var point in nextShape.Points)
                     {
                         highPoint = Math.Max(highPoint, point.Y + 1);
-                        chamber[point.X, point.Y] = true;
+                        chamber[point.X][point.Y] = true;
                     }
 
                     break;
@@ -72,17 +98,12 @@ public static class DoWork
             }
         }
 
-        return highPoint;
+        return highPoint + offset;
     }
 
-    public static int SecondPart(string input)
+    public static long SecondPart(string input)
     {
-        foreach (var line in input.SplitLines())
-        {
-            // stuff
-        }
-
-        return 0;
+        return FirstPart(input, 1000000000000);
     }
 
     private class Shape
