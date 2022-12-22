@@ -6,7 +6,9 @@ public class Tests
     [Test]
     public void BasicFirstPart()
     {
-        DoWork.FirstPart(basicInput).Should().Be(3068);
+        var result = DoWork.FirstPart(basicInput);
+        Console.WriteLine(result);
+        result.Should().Be(3068);
     }
 
     [Test]
@@ -22,9 +24,11 @@ public class Tests
     }
 
     [Test]
-    public void FileSecondPart()
+    public void FileSecondPart17()
     {
-        DoWork.SecondPart(fileInput).Should().Be(1234);
+        var result = DoWork.SecondPart(fileInput);
+        Console.WriteLine(result);
+        result.Should().Be(1234);
     }
 
     private static readonly string basicInput = @">>><<><>><<<>><>>><<<>>><<<><<<>><>><<>>";
