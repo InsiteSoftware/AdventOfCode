@@ -18,7 +18,7 @@ public class Tests
     [Test]
     public void BasicSecondPart()
     {
-        DoWork.SecondPart(basicInput).Should().Be(15142861L);
+        DoWork.SecondPart(basicInput).Should().Be(151428577L);
     }
 
     [Test]

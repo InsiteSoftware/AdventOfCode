@@ -1,7 +1,5 @@
 ﻿namespace Calendars._2022.Day17;
 
-using System.Runtime.CompilerServices;
-
 public static class DoWork
 {
     public static long FirstPart(string input, long totalRocks = 2022)
@@ -17,7 +15,7 @@ public static class DoWork
         var nextGust = 0;
         var highPoint = 1;
         var offset = 0L;
-        for (var rockNumber = 0; rockNumber < totalRocks; rockNumber++)
+        for (var rockNumber = 0L; rockNumber < totalRocks; rockNumber++)
         {
             if (highPoint > 900)
             {
@@ -39,44 +37,6 @@ public static class DoWork
             }
 
             var nextShape = Shape.GetNext(rockNumber, highPoint + 3);
-
-            // void DrawChamber()
-            // {
-            //     for (var y = highPoint + 6; y >= 0; y--)
-            //     {
-            //         for (var x = 0; x < chamber.GetLength(0); x++)
-            //         {
-            //             Console.Write(
-            //                 nextShape.Points.Any(o => o.X == x && o.Y == y)
-            //                     ? "@"
-            //                     : chamber[x, y]
-            //                         ? "#"
-            //                         : "."
-            //             );
-            //         }
-            //         Console.WriteLine();
-            //     }
-            // }
-            //
-            // DrawChamber();
-
-            bool CheckCollisions()
-            {
-                if (nextShape.FarLeft < 0 || nextShape.FarRight > 6)
-                {
-                    return true;
-                }
-
-                foreach (var point in nextShape.Points)
-                {
-                    if (chamber[point.X, point.Y])
-                    {
-                        return true;
-                    }
-                }
-
-                return false;
-            }
 
             while (true)
             {
@@ -163,7 +123,7 @@ public static class DoWork
 
     public static long SecondPart(string input)
     {
-        return FirstPart(input, 10000000);
+        return FirstPart(input, 1_000_000_000_000);
     }
 
     private class Shape
@@ -171,7 +131,7 @@ public static class DoWork
         public int FarLeft;
         public int FarRight;
 
-        public static Shape GetNext(int blockNumber, int startingY)
+        public static Shape GetNext(long blockNumber, int startingY)
         {
             return (blockNumber % 5) switch
             {
@@ -190,6 +150,7 @@ public static class DoWork
             shape.Points.Add(new Point(3, startingY));
             shape.Points.Add(new Point(4, startingY));
             shape.Points.Add(new Point(5, startingY));
+
             shape.FarLeft = 2;
             shape.FarRight = 5;
             return shape;
@@ -272,14 +233,6 @@ public static class DoWork
             for (var x = 0; x < this.Points.Count; x++)
             {
                 this.Points[x].Y--;
-            }
-        }
-
-        public void MoveUp()
-        {
-            for (var x = 0; x < this.Points.Count; x++)
-            {
-                this.Points[x].Y++;
             }
         }
     }
