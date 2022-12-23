@@ -39,6 +39,7 @@ public static class DoWork
                     && plan.Obsidian >= blueprint.GeodeRobotObsidianCost
                 )
                 {
+                    Console.WriteLine("Building Geodebot");
                     addGeode = true;
                     plan.Ore -= blueprint.GeodeRobotOreCost;
                     plan.Obsidian -= blueprint.GeodeRobotObsidianCost;
@@ -50,6 +51,7 @@ public static class DoWork
                     && plan.Clay >= blueprint.ObsidianRobotClayCost
                 )
                 {
+                    Console.WriteLine("Building Obsidianbot");
                     addObsidian = true;
                     plan.Ore -= blueprint.ObsidianRobotOreCost;
                     plan.Clay -= blueprint.ObsidianRobotClayCost;
@@ -58,6 +60,7 @@ public static class DoWork
                 var addClay = false;
                 if (plan.Ore >= blueprint.ClayRobotOreCost)
                 {
+                    Console.WriteLine("Building Claybot");
                     addClay = true;
                     plan.Ore -= blueprint.ClayRobotOreCost;
                 }
@@ -65,11 +68,12 @@ public static class DoWork
                 plan.Ore += plan.OreRobots;
                 plan.Clay += plan.ClayRobots;
                 plan.Obsidian += plan.ObsidianRobots;
-                plan.Geode += plan.ObsidianRobots;
+                plan.Geode += plan.GeodeRobots;
 
                 Console.WriteLine(
                     $"You now have {plan.Ore} ore, {plan.Clay} clay, {plan.Obsidian} obsidian, and {plan.Geode} geode"
                 );
+                Console.WriteLine();
 
                 if (addGeode)
                 {
