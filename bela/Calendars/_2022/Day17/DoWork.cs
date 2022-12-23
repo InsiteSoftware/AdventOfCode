@@ -15,8 +15,42 @@ public static class DoWork
         var nextGust = 0;
         var highPoint = 1;
         var offset = 0L;
+        var gustsCycled = false;
+        var gustsAtRock0 = new HashSet<int>();
+        var startOfCycle = 0L;
+        var gustAtStart = 0;
+        var heightAtStart = 0L;
         for (var rockNumber = 0L; rockNumber < totalRocks; rockNumber++)
         {
+            if (gustsCycled && rockNumber % 5 == 0)
+            {
+                if (startOfCycle == 0)
+                {
+                    if (gustsAtRock0.Contains(nextGust))
+                    {
+                        startOfCycle = rockNumber;
+                        gustAtStart = nextGust;
+                        heightAtStart = offset + highPoint;
+                    }
+                    else
+                    {
+                        gustsAtRock0.Add(nextGust);
+                    }
+                }
+                else if (nextGust == gustAtStart)
+                {
+                    var cycleSize = rockNumber - startOfCycle;
+                    var offsetSize = offset + highPoint - heightAtStart;
+
+                    // could be faster, but it had a bug, good enough!
+                    while (rockNumber + cycleSize < totalRocks)
+                    {
+                        offset += offsetSize;
+                        rockNumber += cycleSize;
+                    }
+                }
+            }
+
             if (highPoint > 900)
             {
                 highPoint -= 800;
@@ -42,6 +76,10 @@ public static class DoWork
             {
                 var moveLeft = gusts[nextGust];
                 nextGust = (nextGust + 1) % gusts.Length;
+                if (nextGust == 0)
+                {
+                    gustsCycled = true;
+                }
                 if (moveLeft)
                 {
                     var canMove = true;

@@ -20,15 +20,13 @@ public class Tests
     [Test]
     public void BasicSecondPart()
     {
-        DoWork.SecondPart(basicInput).Should().Be(151428577L);
+        DoWork.SecondPart(basicInput).Should().Be(1514285714288L);
     }
 
     [Test]
-    public void FileSecondPart17()
+    public void FileSecondPart()
     {
-        var result = DoWork.SecondPart(fileInput);
-        Console.WriteLine(result);
-        result.Should().Be(1234);
+        DoWork.SecondPart(fileInput).Should().Be(1234);
     }
 
     private static readonly string basicInput = @">>><<><>><<<>><>>><<<>>><<<><<<>><>><<>>";
