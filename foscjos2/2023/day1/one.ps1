@@ -1,9 +1,7 @@
-Write-Host "Reading input file..."
-
-$input = Get-Content .\input.txt
+$inputFile = Get-Content .\input.txt
 $total = 0
 
-ForEach ($line in $input) {
+ForEach ($line in $inputFile) {
     $split = $line -split ""
 
     $firstNum = -1
