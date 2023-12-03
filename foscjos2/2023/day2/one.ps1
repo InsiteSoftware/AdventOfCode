@@ -27,10 +27,6 @@ ForEach ($line in $inputFile) {
         }
 
         If ($currentColor -ne '') {
-            # Write-Host $currentColor
-            # Write-Host $gameLimits[$currentColor]
-            # Write-Host $currentNumber
-
             [int]$currentNumber = [convert]::ToInt32($currentNumber, 10)
 
             if ($currentNumber -gt $gameLimits[$currentColor]) {
@@ -41,8 +37,6 @@ ForEach ($line in $inputFile) {
             $currentColor = ''
         }
     }
-
-    # Write-Host "Game $currentGame : $validGame"
 
     if ($validGame -eq $true) {
         $total += $currentGame
