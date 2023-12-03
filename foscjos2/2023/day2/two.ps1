@@ -46,6 +46,7 @@ ForEach ($line in $inputFile) {
                     }
                 }
 
+                # reset
                 $currentColor = ''
                 $currentNumber = 0
             }
